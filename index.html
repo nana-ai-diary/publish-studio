@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>发文工作台</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111827'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='34' fill='white' font-family='Arial'%3E%E5%8F%91%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="library-panel" aria-label="文档库">
+        <div class="brand">
+          <div class="brand-mark">发</div>
+          <div>
+            <h1>发文工作台</h1>
+            <p>长文转图 · 本地文档库</p>
+          </div>
+        </div>
+
+        <div class="library-actions">
+          <button id="newDocBtn" class="primary-button" type="button">新建文档</button>
+          <button id="duplicateDocBtn" class="icon-button" type="button" title="复制当前文档" aria-label="复制当前文档">
+            <span>⧉</span>
+          </button>
+        </div>
+
+        <div class="library-head">
+          <span>历史文档</span>
+          <span id="docCount">0</span>
+        </div>
+        <div id="docList" class="doc-list"></div>
+      </aside>
+
+      <section class="editor-panel" aria-label="编辑器">
+        <div class="editor-top">
+          <input id="titleInput" class="title-input" type="text" aria-label="文档标题" />
+          <button id="deleteDocBtn" class="danger-button" type="button">删除</button>
+        </div>
+
+        <div class="profile-row">
+          <label class="avatar-picker" title="上传头像">
+            <img id="avatarPreview" alt="头像预览" />
+            <input id="avatarInput" type="file" accept="image/*" />
+          </label>
+          <input id="authorInput" class="compact-input" type="text" aria-label="作者名" />
+          <input id="handleInput" class="compact-input" type="text" aria-label="账号名" />
+        </div>
+
+        <div class="toolbar" aria-label="文本工具">
+          <button class="tool-button" type="button" data-action="undo" title="撤回">↶</button>
+          <button class="tool-button" type="button" data-format="h1" title="大标题">H1</button>
+          <button class="tool-button" type="button" data-format="h2" title="小标题">H2</button>
+          <button class="tool-button" type="button" data-format="bold" title="加粗">B</button>
+          <button class="tool-button" type="button" data-format="italic" title="斜体"><span class="italic-label">I</span></button>
+          <button class="tool-button" type="button" data-format="inlineColor" title="文字选色">A</button>
+          <button class="tool-button" type="button" data-format="highlight" title="高亮背景">▣</button>
+          <button class="tool-button" type="button" data-format="quote" title="引用">”</button>
+          <button class="tool-button" type="button" data-format="code" title="代码块">{}</button>
+          <button class="tool-button" type="button" data-format="titleBlock" title="居中标题块">T</button>
+          <span class="align-tools" aria-label="对齐工具">
+            <button class="tool-button" type="button" data-format="alignLeft" title="左对齐">←</button>
+            <button class="tool-button" type="button" data-format="alignCenter" title="居中对齐">≡</button>
+            <button class="tool-button" type="button" data-format="alignRight" title="右对齐">→</button>
+          </span>
+          <select id="galleryLayoutInput" class="select-control" title="版式">
+            <option value="auto">单图模式</option>
+            <option value="two-cols">双图左右</option>
+            <option value="two-rows">双图上下</option>
+            <option value="three-left">三图左1右2</option>
+            <option value="three-right">三图右1左2</option>
+            <option value="three-cols">三图并列</option>
+            <option value="four-grid">四图环绕</option>
+          </select>
+          <label class="tool-button file-tool" title="上传图片">
+            图
+            <input id="imageInput" type="file" accept="image/*" multiple />
+          </label>
+        </div>
+
+        <div id="imageStrip" class="image-strip" aria-label="图片素材"></div>
+
+        <div class="settings-row">
+          <label>
+            正文色
+            <input id="textColorInput" type="color" value="#202938" />
+          </label>
+          <label>
+            标题色
+            <input id="accentColorInput" type="color" value="#2563eb" />
+          </label>
+          <label>
+            高亮色
+            <input id="highlightColorInput" type="color" value="#fff2a8" />
+          </label>
+          <label>
+            文字选色
+            <input id="inlineColorInput" type="color" value="#e11d48" />
+          </label>
+          <label>
+            字号
+            <input id="fontSizeInput" type="number" min="24" max="42" value="31" />
+          </label>
+          <label>
+            行距
+            <input id="lineHeightInput" type="number" min="1.25" max="2.4" step="0.05" value="1.6" />
+          </label>
+        </div>
+
+        <div class="find-replace" aria-label="查找替换">
+          <input id="findInput" class="find-input" type="text" placeholder="查找" />
+          <input id="replaceInput" class="find-input" type="text" placeholder="替换为" />
+          <button id="findPrevBtn" class="mini-button" type="button" title="上一个">↑</button>
+          <button id="findNextBtn" class="mini-button" type="button" title="下一个">↓</button>
+          <button id="replaceCurrentBtn" class="mini-button text-mini" type="button">替换</button>
+          <button id="replaceAllBtn" class="mini-button text-mini" type="button">全部</button>
+          <span id="findStatus" class="find-status">0/0</span>
+        </div>
+
+        <textarea id="contentInput" class="content-input" spellcheck="false"></textarea>
+      </section>
+
+      <section class="preview-panel" aria-label="预览与下载">
+        <header class="preview-top">
+          <div>
+            <h2>预览与下载</h2>
+            <p id="statusText">准备排版</p>
+          </div>
+          <div class="preview-actions">
+            <button id="copyRichBtn" class="secondary-button" type="button">复制富文本</button>
+            <button id="downloadLongBtn" class="secondary-button" type="button">下载长图</button>
+            <button id="downloadAllBtn" class="primary-button" type="button">批量下载</button>
+          </div>
+        </header>
+        <div id="pages" class="pages"></div>
+      </section>
+    </main>
+
+    <div id="cropModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="cropTitle">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h3 id="cropTitle">裁剪图片</h3>
+            <p>拖动裁剪框选择要保留的区域</p>
+          </div>
+          <button id="cropCloseBtn" class="icon-button ghost" type="button" title="关闭">×</button>
+        </div>
+        <div class="crop-body">
+          <canvas id="cropCanvas" width="760" height="520"></canvas>
+          <aside class="crop-side">
+            <div class="ratio-grid">
+              <button type="button" class="ratio-button active" data-ratio="original">原比例</button>
+              <button type="button" class="ratio-button" data-ratio="1">1:1</button>
+              <button type="button" class="ratio-button" data-ratio="0.75">3:4</button>
+              <button type="button" class="ratio-button" data-ratio="1.333333">4:3</button>
+              <button type="button" class="ratio-button" data-ratio="1.777778">16:9</button>
+            </div>
+            <button id="cropResetBtn" class="secondary-button" type="button">恢复原图</button>
+            <button id="cropApplyBtn" class="primary-button" type="button">应用裁剪</button>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
