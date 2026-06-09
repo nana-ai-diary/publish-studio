@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Publish Studio</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111827'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='34' fill='white' font-family='Arial'%3E%E5%8F%91%3C/text%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111827'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='34' fill='white' font-family='Arial'%3E%E6%96%87%3C/text%3E%3C/svg%3E" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -12,7 +12,7 @@
       <aside class="library-panel" aria-label="文档库">
         <div class="brand-row">
           <div class="brand">
-            <div class="brand-mark">发</div>
+            <div class="brand-mark">文</div>
             <div class="brand-copy">
               <h1>Publish Studio</h1>
               <p>长文转图 · 本地文档库</p>
@@ -136,11 +136,10 @@
         <header class="preview-top">
           <div class="preview-heading-row">
             <div class="preview-title-block">
-              <h2>预览</h2>
+              <h2>预览与下载</h2>
               <p id="statusText">准备排版</p>
             </div>
             <div class="preview-switch-group">
-              <span class="preview-row-label">切换</span>
               <div class="preview-mode-switch" aria-label="预览模式">
                 <button id="cardModeBtn" class="mode-button active" type="button" data-preview-mode="card">小红书卡片</button>
                 <button id="articleModeBtn" class="mode-button" type="button" data-preview-mode="article">公众号长文</button>
@@ -148,7 +147,6 @@
             </div>
           </div>
           <div class="download-row">
-            <span class="preview-row-label">下载与复制</span>
             <div class="preview-actions">
               <button id="copyRichBtn" class="secondary-button" type="button">复制富文本</button>
               <details id="downloadMenu" class="download-menu">

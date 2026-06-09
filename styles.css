@@ -8,6 +8,7 @@
   --accent: #2563eb;
   --danger: #c2410c;
   --shadow: 0 18px 42px rgba(31, 41, 55, 0.12);
+  --preview-control-width: 346px;
 }
 
 * {
@@ -738,6 +739,10 @@ button {
   gap: 16px;
 }
 
+.download-row {
+  justify-content: flex-end;
+}
+
 .preview-title-block {
   min-width: 0;
 }
@@ -749,21 +754,15 @@ button {
 .preview-switch-group {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.preview-row-label {
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 850;
-  white-space: nowrap;
+  width: var(--preview-control-width);
 }
 
 .preview-actions {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  flex-wrap: nowrap;
+  justify-content: space-between;
   gap: 10px;
+  width: var(--preview-control-width);
 }
 
 .download-menu {
@@ -814,6 +813,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  width: 100%;
   padding: 4px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -821,6 +821,7 @@ button {
 }
 
 .mode-button {
+  flex: 1 1 0;
   min-height: 30px;
   padding: 0 10px;
   border-radius: 6px;
@@ -1023,6 +1024,10 @@ button {
 }
 
 @media (max-width: 760px) {
+  :root {
+    --preview-control-width: min(100%, 346px);
+  }
+
   .app-shell {
     grid-template-columns: 1fr;
   }
@@ -1063,6 +1068,6 @@ button {
   }
 
   .preview-mode-switch {
-    width: max-content;
+    width: 100%;
   }
 }
