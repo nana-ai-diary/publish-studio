@@ -25,6 +25,14 @@
           </button>
         </div>
 
+        <div class="library-actions backup-actions">
+          <button id="exportDocsBtn" class="secondary-button compact-action" type="button">导出备份</button>
+          <label class="secondary-button compact-action file-import" title="导入备份或 Markdown">
+            导入
+            <input id="importDocsInput" type="file" accept=".json,.md,.txt,application/json,text/markdown,text/plain" />
+          </label>
+        </div>
+
         <div class="library-head">
           <span>历史文档</span>
           <span id="docCount">0</span>
@@ -58,6 +66,7 @@
           <button class="tool-button" type="button" data-format="quote" title="引用">”</button>
           <button class="tool-button" type="button" data-format="code" title="代码块">{}</button>
           <button class="tool-button" type="button" data-format="titleBlock" title="居中标题块">T</button>
+          <button class="tool-button" type="button" data-format="pageBreak" title="分页">⤓</button>
           <span class="align-tools" aria-label="对齐工具">
             <button class="tool-button" type="button" data-format="alignLeft" title="左对齐">←</button>
             <button class="tool-button" type="button" data-format="alignCenter" title="居中对齐">≡</button>

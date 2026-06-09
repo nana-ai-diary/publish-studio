@@ -11,6 +11,8 @@ const els = {
   docCount: $("#docCount"),
   newDoc: $("#newDocBtn"),
   duplicateDoc: $("#duplicateDocBtn"),
+  exportDocs: $("#exportDocsBtn"),
+  importDocs: $("#importDocsInput"),
   deleteDoc: $("#deleteDocBtn"),
   title: $("#titleInput"),
   author: $("#authorInput"),
@@ -106,7 +108,9 @@ function defaultGuideContent() {
 3. 在版式下拉里选择图片排版，再点击「图」上传图片。
 4. 需要调整图片时，在素材区点「裁剪」，可以选择原比例、1:1、3:4、4:3、16:9。
 5. 内容比较长时，可以用正文上方的查找替换栏快速定位和批量替换。
-6. 发公众号时点「复制富文本」；发小红书时点「下载长图」或「批量下载」。
+6. 需要强制换到下一张图时，点工具栏里的「分页」按钮，会插入 :::pagebreak。
+7. 需要备份时，左侧点「导出备份」；换电脑或换浏览器时，点「导入」恢复。
+8. 发公众号时点「复制富文本」；发小红书时点「下载长图」或「批量下载」。
 
 ## 文字示例
 
@@ -192,9 +196,12 @@ function migrateSeedDocs(parsed) {
     const looksLikePreviousGuide =
       doc.author === defaultAuthor &&
       doc.title === "使用指南" &&
-      (String(doc.content || "").startsWith("# 欢迎来到娜娜酱AI日记") ||
+        (String(doc.content || "").startsWith("# 欢迎来到娜娜酱AI日记") ||
         (String(doc.content || "").includes("最常用的流程") &&
-          (!String(doc.content || "").includes("自由文字颜色") || !String(doc.content || "").includes("查找替换栏"))));
+          (!String(doc.content || "").includes("自由文字颜色") ||
+            !String(doc.content || "").includes("查找替换栏") ||
+            !String(doc.content || "").includes("导出备份") ||
+            !String(doc.content || "").includes("pagebreak"))));
 
     if (!looksLikeOldSeed && !looksLikePreviousGuide) return doc;
 
@@ -419,6 +426,114 @@ function deleteDoc() {
   requestRender();
 }
 
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = reject;
+    reader.readAsText(file, "utf-8");
+  });
+}
+
+function exportDocuments() {
+  syncFormToDoc(false);
+  const payload = {
+    app: "fawen-studio",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    activeId,
+    docs,
+  };
+  const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "");
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
+  saveBlob(blob, `fawen-studio-backup-${stamp}.json`);
+  els.status.textContent = `已导出 ${docs.length} 篇文档备份`;
+}
+
+function normalizeImportedDoc(raw, fallbackTitle = "导入文档") {
+  const doc = {
+    ...defaultDoc(),
+    ...raw,
+    id: raw.id || uid("doc"),
+    title: raw.title || fallbackTitle,
+    updatedAt: Date.now(),
+    settings: {
+      ...defaultDoc().settings,
+      ...(raw.settings || {}),
+    },
+    images: raw.images && typeof raw.images === "object" ? raw.images : {},
+    content: String(raw.content || ""),
+  };
+  if (!doc.content.trim()) doc.content = defaultGuideContent();
+  if (!doc.author) doc.author = defaultAuthor;
+  if (!doc.handle) doc.handle = defaultHandle;
+  if (!doc.avatar) doc.avatar = sampleAvatar;
+  return doc;
+}
+
+function uniqueImportedDoc(doc) {
+  const existingIds = new Set(docs.map((item) => item.id));
+  if (!existingIds.has(doc.id)) return doc;
+  return {
+    ...doc,
+    id: uid("doc"),
+    title: `${doc.title} 导入`,
+  };
+}
+
+function titleFromMarkdown(text, filename) {
+  const heading = text.match(/^#\s+(.+)$/m);
+  if (heading) return heading[1].trim().slice(0, 40) || "导入文档";
+  return (filename || "导入文档").replace(/\.(md|txt)$/i, "").slice(0, 40) || "导入文档";
+}
+
+async function importDocuments(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await readFileAsText(file);
+    let imported = [];
+    let importedActiveId = null;
+    if (/\.json$/i.test(file.name)) {
+      const data = JSON.parse(text);
+      const rawDocs = Array.isArray(data) ? data : Array.isArray(data.docs) ? data.docs : [];
+      importedActiveId = data.activeId || rawDocs[0]?.id || null;
+      imported = rawDocs.map((doc) => normalizeImportedDoc(doc, doc.title || file.name));
+    } else {
+      imported = [
+        normalizeImportedDoc(
+          {
+            title: titleFromMarkdown(text, file.name),
+            content: text,
+          },
+          titleFromMarkdown(text, file.name),
+        ),
+      ];
+    }
+
+    imported = imported.filter((doc) => doc.content || doc.title).map(uniqueImportedDoc);
+    if (!imported.length) {
+      els.status.textContent = "没有找到可导入的文档";
+      return;
+    }
+
+    docs = [...imported, ...docs];
+    const activeImported = imported.find((doc) => doc.id === importedActiveId) || imported[0];
+    activeId = activeImported.id;
+    saveDocs();
+    loadDocToForm();
+    renderDocList();
+    undoStack.length = 0;
+    pushHistoryNow();
+    requestRender();
+    els.status.textContent = `已导入 ${imported.length} 篇文档`;
+  } catch (error) {
+    els.status.textContent = `导入失败：${error.message || "文件格式不正确"}`;
+  } finally {
+    event.target.value = "";
+  }
+}
+
 function requestRender() {
   clearTimeout(renderTimer);
   renderTimer = setTimeout(render, 120);
@@ -472,6 +587,7 @@ function wrapSelection(kind) {
   if (kind === "inlineColor") next = `{color:${els.inlineColor.value}|${selected}}`;
   if (kind === "code") next = `\`\`\`\n${selected}\n\`\`\``;
   if (kind === "titleBlock") next = `:::title\n${selected}\n:::`;
+  if (kind === "pageBreak") next = `\n:::pagebreak\n`;
   if (kind === "h1" || kind === "h2" || kind === "quote") {
     const prefix = kind === "h1" ? "# " : kind === "h2" ? "## " : "> ";
     const lineStart = els.content.value.lastIndexOf("\n", Math.max(0, start - 1)) + 1;
@@ -1108,6 +1224,11 @@ function parseBlocks(content) {
     const line = lines[i].trim();
     if (!line) continue;
 
+    if (/^:::\s*pagebreak\s*$/.test(line) || /^---\s*pagebreak\s*---$/i.test(line)) {
+      blocks.push({ type: "pageBreak" });
+      continue;
+    }
+
     const codeStart = line.match(/^```([\w-]*)\s*$/);
     if (codeStart) {
       const codeLines = [];
@@ -1342,6 +1463,11 @@ async function buildPages(doc) {
   };
 
   for (const block of blocks) {
+    if (block.type === "pageBreak") {
+      if (page.length) finish();
+      continue;
+    }
+
     if (block.type === "code") {
       const style = styleFor("code", settings);
       const lineHeight = Math.ceil(style.size * style.lineHeight);
@@ -1443,6 +1569,12 @@ async function buildLongDocument(doc) {
   };
 
   for (const block of blocks) {
+    if (block.type === "pageBreak") {
+      y += hasContent ? 120 : 0;
+      hasContent = true;
+      continue;
+    }
+
     if (block.type === "code") {
       const style = styleFor("code", settings);
       const lineHeight = Math.ceil(style.size * style.lineHeight);
@@ -2122,6 +2254,7 @@ async function buildRichHtml(doc) {
     else if (block.type === "quote") htmlParts.push(`<blockquote style="${styles.quote}">${inlineMarkdownToHtml(block.text)}</blockquote>`);
     else if (block.type === "code") htmlParts.push(codeBlockHtml(block, styles));
     else if (block.type === "titleBlock") htmlParts.push(`<section style="${styles.titleBlock}"><span style="${styles.titleBlockInner}">${inlineMarkdownToHtml(block.text)}</span></section>`);
+    else if (block.type === "pageBreak") htmlParts.push(`<section style="height:42px;margin:24px 0;border-top:1px dashed #d8e0ea;"></section>`);
     else if (block.type === "image" || block.type === "gallery") htmlParts.push(await galleryHtml(doc, block, styles));
     else htmlParts.push(`<p style="${styles.p}${block.align ? `text-align:${block.align};` : ""}">${inlineMarkdownToHtml(block.text)}</p>`);
   }
@@ -2232,6 +2365,8 @@ async function copyRichText() {
 function bindEvents() {
   els.newDoc.addEventListener("click", createDoc);
   els.duplicateDoc.addEventListener("click", duplicateDoc);
+  els.exportDocs.addEventListener("click", exportDocuments);
+  els.importDocs.addEventListener("change", importDocuments);
   els.deleteDoc.addEventListener("click", deleteDoc);
   els.avatarInput.addEventListener("change", handleAvatar);
   els.imageInput.addEventListener("change", handleImages);

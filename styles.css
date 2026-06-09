@@ -214,12 +214,29 @@ button {
 }
 
 .avatar-picker input,
-.file-tool input {
+.file-tool input,
+.file-import input {
   position: absolute;
   width: 1px;
   height: 1px;
   opacity: 0;
   pointer-events: none;
+}
+
+.backup-actions {
+  grid-template-columns: 1fr 74px;
+}
+
+.compact-action {
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.file-import {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .compact-input,
