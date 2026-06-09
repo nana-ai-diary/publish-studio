@@ -48,6 +48,10 @@ button {
   grid-template-columns: 72px minmax(380px, 500px) 1fr;
 }
 
+.app-shell.sidebar-collapsed .preview-mode-dock {
+  left: 572px;
+}
+
 .library-panel,
 .editor-panel,
 .preview-panel {
@@ -753,7 +757,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  width: min(520px, calc(100vw - 64px));
+  width: min(340px, calc(100vw - 48px));
   padding: 4px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -762,12 +766,13 @@ button {
 }
 
 .preview-mode-dock {
-  position: sticky;
-  bottom: 18px;
+  position: fixed;
+  right: 0;
+  bottom: 14px;
+  left: 760px;
   z-index: 6;
   display: flex;
   justify-content: center;
-  margin: 18px 0 0;
   pointer-events: none;
 }
 
@@ -976,6 +981,11 @@ button {
   .preview-panel {
     grid-column: 1 / -1;
   }
+
+  .preview-mode-dock,
+  .app-shell.sidebar-collapsed .preview-mode-dock {
+    left: 0;
+  }
 }
 
 @media (max-width: 760px) {
@@ -1005,6 +1015,6 @@ button {
   }
 
   .preview-mode-switch {
-    width: min(100%, 360px);
+    width: min(100%, 320px);
   }
 }
