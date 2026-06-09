@@ -134,18 +134,26 @@
 
       <section class="preview-panel" aria-label="预览与下载">
         <header class="preview-top">
-          <div>
-            <h2>预览与下载</h2>
-            <p id="statusText">准备排版</p>
-          </div>
-          <div class="preview-actions">
-            <div class="preview-mode-switch" aria-label="预览模式">
-              <button id="cardModeBtn" class="mode-button active" type="button" data-preview-mode="card">小红书卡片</button>
-              <button id="articleModeBtn" class="mode-button" type="button" data-preview-mode="article">公众号长文</button>
+          <div class="preview-heading-row">
+            <div class="preview-title-block">
+              <h2>预览</h2>
+              <p id="statusText">准备排版</p>
             </div>
-            <button id="copyRichBtn" class="secondary-button" type="button">复制富文本</button>
-            <button id="downloadLongBtn" class="secondary-button" type="button">下载长图</button>
-            <button id="downloadAllBtn" class="primary-button" type="button">批量下载</button>
+            <div class="preview-switch-group">
+              <span class="preview-row-label">切换</span>
+              <div class="preview-mode-switch" aria-label="预览模式">
+                <button id="cardModeBtn" class="mode-button active" type="button" data-preview-mode="card">小红书卡片</button>
+                <button id="articleModeBtn" class="mode-button" type="button" data-preview-mode="article">公众号长文</button>
+              </div>
+            </div>
+          </div>
+          <div class="download-row">
+            <span class="preview-row-label">下载与复制</span>
+            <div class="preview-actions">
+              <button id="copyRichBtn" class="secondary-button" type="button">复制富文本</button>
+              <button id="downloadLongBtn" class="secondary-button" type="button">下载长图</button>
+              <button id="downloadAllBtn" class="primary-button" type="button">批量下载</button>
+            </div>
           </div>
         </header>
         <div id="pages" class="pages"></div>

@@ -721,20 +721,46 @@ button {
   position: sticky;
   top: 0;
   z-index: 5;
-  justify-content: space-between;
-  gap: 16px;
+  display: grid;
+  gap: 10px;
   margin: -24px -28px 24px;
-  padding: 22px 28px 18px;
+  padding: 18px 28px 16px;
   border-bottom: 1px solid var(--line);
   background: rgba(238, 243, 248, 0.95);
   backdrop-filter: blur(12px);
+}
+
+.preview-heading-row,
+.download-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.preview-title-block {
+  min-width: 0;
 }
 
 .preview-top h2 {
   font-size: 21px;
 }
 
+.preview-switch-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview-row-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
 .preview-actions {
+  display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 10px;
@@ -968,5 +994,26 @@ button {
   .preview-top {
     position: static;
     display: grid;
+  }
+
+  .preview-heading-row,
+  .download-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .preview-switch-group {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .preview-actions {
+    justify-content: flex-start;
+  }
+
+  .preview-mode-switch {
+    width: max-content;
   }
 }
