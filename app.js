@@ -43,7 +43,6 @@ const els = {
   articleMode: $("#articleModeBtn"),
   status: $("#statusText"),
   copyRich: $("#copyRichBtn"),
-  downloadMenu: $("#downloadMenu"),
   downloadLong: $("#downloadLongBtn"),
   downloadAll: $("#downloadAllBtn"),
   findInput: $("#findInput"),
@@ -2444,19 +2443,8 @@ function bindEvents() {
   els.imageInput.addEventListener("change", handleImages);
   document.querySelector("[data-action='undo']")?.addEventListener("click", undoDoc);
   els.copyRich.addEventListener("click", copyRichText);
-  els.downloadLong.addEventListener("click", () => {
-    els.downloadMenu.open = false;
-    downloadLongImage();
-  });
-  els.downloadAll.addEventListener("click", () => {
-    els.downloadMenu.open = false;
-    downloadAll();
-  });
-  document.addEventListener("click", (event) => {
-    if (els.downloadMenu.open && !els.downloadMenu.contains(event.target)) {
-      els.downloadMenu.open = false;
-    }
-  });
+  els.downloadLong.addEventListener("click", downloadLongImage);
+  els.downloadAll.addEventListener("click", downloadAll);
   els.cardMode.addEventListener("click", () => setPreviewMode("card"));
   els.articleMode.addEventListener("click", () => setPreviewMode("article"));
   els.replaceToggle.addEventListener("click", () => {
