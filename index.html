@@ -151,8 +151,13 @@
             <span class="preview-row-label">下载与复制</span>
             <div class="preview-actions">
               <button id="copyRichBtn" class="secondary-button" type="button">复制富文本</button>
-              <button id="downloadLongBtn" class="secondary-button" type="button">下载长图</button>
-              <button id="downloadAllBtn" class="primary-button" type="button">批量下载</button>
+              <details id="downloadMenu" class="download-menu">
+                <summary class="primary-button download-toggle">下载</summary>
+                <div class="download-menu-panel" aria-label="下载方式">
+                  <button id="downloadLongBtn" class="download-option" type="button">下载长图</button>
+                  <button id="downloadAllBtn" class="download-option" type="button">批量下载</button>
+                </div>
+              </details>
             </div>
           </div>
         </header>
