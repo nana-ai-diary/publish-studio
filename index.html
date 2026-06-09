@@ -53,10 +53,11 @@
           </label>
           <input id="authorInput" class="compact-input" type="text" aria-label="作者名" />
           <input id="handleInput" class="compact-input" type="text" aria-label="账号名" />
+          <button class="tool-button profile-tool" type="button" data-action="undo" title="撤销">↶</button>
+          <button id="replaceToggleBtn" class="tool-button profile-tool" type="button" title="查找替换">⇄</button>
         </div>
 
         <div class="toolbar" aria-label="文本工具">
-          <button class="tool-button" type="button" data-action="undo" title="撤回">↶</button>
           <button class="tool-button" type="button" data-format="h1" title="大标题">H1</button>
           <button class="tool-button" type="button" data-format="h2" title="小标题">H2</button>
           <button class="tool-button" type="button" data-format="bold" title="加粗">B</button>
@@ -116,7 +117,7 @@
           </label>
         </div>
 
-        <div class="find-replace" aria-label="查找替换">
+        <div id="replacePanel" class="find-replace hidden" aria-label="查找替换">
           <input id="findInput" class="find-input" type="text" placeholder="查找" />
           <input id="replaceInput" class="find-input" type="text" placeholder="替换为" />
           <button id="findPrevBtn" class="mini-button" type="button" title="上一个">↑</button>

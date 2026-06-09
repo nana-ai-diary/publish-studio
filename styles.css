@@ -191,7 +191,7 @@ button {
 
 .profile-row {
   display: grid;
-  grid-template-columns: 44px minmax(110px, 1fr) minmax(90px, 0.8fr);
+  grid-template-columns: 44px minmax(0, 1fr) minmax(0, 0.8fr) 34px 34px;
   gap: 8px;
 }
 
@@ -277,6 +277,11 @@ button {
   background: var(--soft);
 }
 
+.profile-tool {
+  width: 34px;
+  align-self: stretch;
+}
+
 .align-tools {
   display: inline-flex;
   flex: 0 0 auto;
@@ -355,6 +360,10 @@ button {
   align-items: center;
 }
 
+.find-replace.hidden {
+  display: none;
+}
+
 .find-input {
   min-width: 0;
   height: 34px;
@@ -407,21 +416,23 @@ button {
 
 .image-strip {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
+  flex: 0 0 auto;
   gap: 8px;
-  min-height: 0;
+  min-height: 88px;
   overflow-x: auto;
-  padding: 2px 0 6px;
+  overflow-y: hidden;
+  padding: 10px 0 12px;
 }
 
 .image-chip {
   position: relative;
   display: grid;
-  grid-template-columns: 46px auto;
+  grid-template-columns: 54px 148px;
   gap: 8px;
   align-items: center;
   flex: 0 0 auto;
-  max-width: 210px;
+  width: 226px;
   padding: 6px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -430,7 +441,7 @@ button {
 
 .image-clear-button {
   flex: 0 0 auto;
-  min-height: 52px;
+  min-height: 68px;
   padding: 0 12px;
   border: 1px dashed #cbd5e1;
   border-radius: 8px;
@@ -458,8 +469,8 @@ button {
 }
 
 .image-chip img {
-  width: 46px;
-  height: 38px;
+  width: 54px;
+  height: 48px;
   border-radius: 6px;
   object-fit: cover;
   background: #eef3f8;
@@ -484,8 +495,8 @@ button {
 }
 
 .image-chip-actions button {
-  min-height: 26px;
-  padding: 0 7px;
+  min-height: 25px;
+  padding: 0 6px;
   border: 1px solid var(--line);
   border-radius: 6px;
   color: var(--ink);

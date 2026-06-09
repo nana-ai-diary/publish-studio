@@ -40,6 +40,8 @@ const els = {
   findNext: $("#findNextBtn"),
   replaceCurrent: $("#replaceCurrentBtn"),
   replaceAll: $("#replaceAllBtn"),
+  replaceToggle: $("#replaceToggleBtn"),
+  replacePanel: $("#replacePanel"),
   findStatus: $("#findStatus"),
   cropModal: $("#cropModal"),
   cropCanvas: $("#cropCanvas"),
@@ -1760,11 +1762,6 @@ async function drawPage(items, index, total, doc) {
     if (item.type === "missing-gallery") drawMissingGallery(ctx, item, settings);
   }
 
-  ctx.fillStyle = isDark(settings.bgColor) ? "rgba(255,255,255,.48)" : "#98a2b3";
-  ctx.font = '600 22px "PingFang SC", "Microsoft YaHei", sans-serif';
-  ctx.textAlign = "center";
-  ctx.fillText(`${index + 1} / ${total}`, CANVAS_WIDTH / 2, CANVAS_HEIGHT - 28);
-  ctx.textAlign = "left";
   return canvas;
 }
 
@@ -1789,11 +1786,6 @@ async function drawLongCanvas(doc) {
     if (item.type === "missing-gallery") drawMissingGallery(ctx, item, settings);
   }
 
-  ctx.fillStyle = isDark(settings.bgColor) ? "rgba(255,255,255,.44)" : "#98a2b3";
-  ctx.font = '600 22px "PingFang SC", "Microsoft YaHei", sans-serif';
-  ctx.textAlign = "center";
-  ctx.fillText("发文工作台 · 长图", CANVAS_WIDTH / 2, canvas.height - 30);
-  ctx.textAlign = "left";
   return canvas;
 }
 
@@ -2374,6 +2366,13 @@ function bindEvents() {
   els.copyRich.addEventListener("click", copyRichText);
   els.downloadLong.addEventListener("click", downloadLongImage);
   els.downloadAll.addEventListener("click", downloadAll);
+  els.replaceToggle.addEventListener("click", () => {
+    els.replacePanel.classList.toggle("hidden");
+    if (!els.replacePanel.classList.contains("hidden")) {
+      els.findInput.focus();
+      updateFindStatus();
+    }
+  });
   els.findInput.addEventListener("input", updateFindStatus);
   els.replaceInput.addEventListener("input", updateFindStatus);
   els.findPrev.addEventListener("click", () => findInContent(-1));
