@@ -58,41 +58,37 @@
         </div>
 
         <div class="toolbar" aria-label="文本工具">
-          <div class="tool-group text-tools">
-            <button class="tool-button" type="button" data-format="h1" title="大标题">H1</button>
-            <button class="tool-button" type="button" data-format="h2" title="小标题">H2</button>
-            <button class="tool-button" type="button" data-format="bold" title="加粗">B</button>
-            <button class="tool-button" type="button" data-format="italic" title="斜体"><span class="italic-label">I</span></button>
-            <button class="tool-button" type="button" data-format="inlineColor" title="文字选色">A</button>
-            <button class="tool-button" type="button" data-format="highlight" title="高亮背景">▣</button>
-            <button class="tool-button" type="button" data-format="quote" title="引用">”</button>
-            <button class="tool-button" type="button" data-format="code" title="代码块">{}</button>
-            <button class="tool-button" type="button" data-format="titleBlock" title="居中标题块">T</button>
-            <button class="tool-button" type="button" data-format="pageBreak" title="分页">⤓</button>
-            <details id="alignMenu" class="align-menu">
-              <summary class="tool-button align-toggle" title="对齐方式" aria-label="对齐方式">≡</summary>
-              <div class="align-menu-panel" aria-label="对齐工具">
-                <button class="tool-button align-option" type="button" data-format="alignLeft" title="左对齐">←</button>
-                <button class="tool-button align-option" type="button" data-format="alignCenter" title="居中对齐">≡</button>
-                <button class="tool-button align-option" type="button" data-format="alignRight" title="右对齐">→</button>
-              </div>
-            </details>
-          </div>
-          <div class="tool-group layout-tools">
-            <select id="galleryLayoutInput" class="select-control" title="版式">
-              <option value="auto">单图模式</option>
-              <option value="two-cols">双图左右</option>
-              <option value="two-rows">双图上下</option>
-              <option value="three-left">三图左1右2</option>
-              <option value="three-right">三图右1左2</option>
-              <option value="three-cols">三图并列</option>
-              <option value="four-grid">四图环绕</option>
-            </select>
-            <label class="tool-button file-tool" title="上传图片">
-              图
-              <input id="imageInput" type="file" accept="image/*" multiple />
-            </label>
-          </div>
+          <button class="tool-button" type="button" data-format="h1" title="大标题">H1</button>
+          <button class="tool-button" type="button" data-format="h2" title="小标题">H2</button>
+          <button class="tool-button" type="button" data-format="bold" title="加粗">B</button>
+          <button class="tool-button" type="button" data-format="italic" title="斜体"><span class="italic-label">I</span></button>
+          <button class="tool-button" type="button" data-format="inlineColor" title="文字选色">A</button>
+          <button class="tool-button" type="button" data-format="highlight" title="高亮背景">▣</button>
+          <button class="tool-button" type="button" data-format="quote" title="引用">”</button>
+          <button class="tool-button" type="button" data-format="code" title="代码块">{}</button>
+          <button class="tool-button" type="button" data-format="titleBlock" title="居中标题块">T</button>
+          <button class="tool-button" type="button" data-format="pageBreak" title="分页">⤓</button>
+          <details id="alignMenu" class="align-menu">
+            <summary class="tool-button align-toggle" title="对齐方式" aria-label="对齐方式">≡</summary>
+            <div class="align-menu-panel" aria-label="对齐工具">
+              <button class="tool-button align-option" type="button" data-format="alignLeft" title="左对齐">←</button>
+              <button class="tool-button align-option" type="button" data-format="alignCenter" title="居中对齐">≡</button>
+              <button class="tool-button align-option" type="button" data-format="alignRight" title="右对齐">→</button>
+            </div>
+          </details>
+          <select id="galleryLayoutInput" class="select-control" title="版式">
+            <option value="auto">单图模式</option>
+            <option value="two-cols">双图左右</option>
+            <option value="two-rows">双图上下</option>
+            <option value="three-left">三图左1右2</option>
+            <option value="three-right">三图右1左2</option>
+            <option value="three-cols">三图并列</option>
+            <option value="four-grid">四图环绕</option>
+          </select>
+          <label class="tool-button file-tool" title="上传图片">
+            图
+            <input id="imageInput" type="file" accept="image/*" multiple />
+          </label>
         </div>
 
         <div id="imageStrip" class="image-strip" aria-label="图片素材"></div>
