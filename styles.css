@@ -1,13 +1,13 @@
 :root {
-  --ink: #1f2937;
-  --muted: #667085;
-  --line: #d9e0ea;
+  --ink: #172033;
+  --muted: #64748b;
+  --line: #d6dee9;
   --paper: #ffffff;
-  --panel: #f7f9fc;
-  --soft: #eef3f8;
+  --panel: #f4f7fb;
+  --soft: #eef4fa;
   --accent: #2563eb;
   --danger: #c2410c;
-  --shadow: 0 18px 42px rgba(31, 41, 55, 0.12);
+  --shadow: 0 18px 42px rgba(23, 32, 51, 0.11);
 }
 
 * {
@@ -19,7 +19,7 @@ body {
   min-height: 100vh;
   overflow: hidden;
   color: var(--ink);
-  background: var(--panel);
+  background: #edf2f7;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -37,9 +37,32 @@ button {
   cursor: pointer;
 }
 
+button,
+summary,
+.file-tool,
+.image-manager-button,
+.compact-input,
+.title-input,
+.content-input,
+.select-control,
+.settings-row input {
+  transition:
+    border-color 0.16s ease,
+    background 0.16s ease,
+    color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.16s ease;
+}
+
+button:active,
+.file-tool:active,
+.image-manager-button:active {
+  transform: translateY(1px);
+}
+
 .app-shell {
   display: grid;
-  grid-template-columns: 260px minmax(380px, 500px) 1fr;
+  grid-template-columns: 248px minmax(500px, 580px) minmax(420px, 1fr);
   height: 100vh;
 }
 
@@ -54,7 +77,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 18px;
+  padding: 18px 16px;
   color: #f8fafc;
   background: #111827;
 }
@@ -165,8 +188,8 @@ button {
 .editor-panel {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 18px;
+  gap: 14px;
+  padding: 20px;
   border-right: 1px solid var(--line);
   background: var(--paper);
 }
@@ -178,10 +201,10 @@ button {
 .title-input {
   min-width: 0;
   flex: 1;
-  height: 44px;
+  height: 48px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 0 13px;
+  padding: 0 14px;
   color: var(--ink);
   background: #fbfcfe;
   font-size: 20px;
@@ -191,14 +214,14 @@ button {
 
 .profile-row {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) minmax(0, 0.8fr) 34px 34px;
-  gap: 8px;
+  grid-template-columns: 48px minmax(0, 1fr) minmax(0, 0.78fr) 38px 38px;
+  gap: 10px;
 }
 
 .avatar-picker {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 50%;
@@ -242,7 +265,7 @@ button {
 .compact-input,
 .select-control {
   min-width: 0;
-  height: 38px;
+  height: 40px;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0 10px;
@@ -251,9 +274,39 @@ button {
   outline: 0;
 }
 
+.title-input:focus,
+.compact-input:focus,
+.content-input:focus,
+.select-control:focus,
+.find-input:focus,
+.settings-row input:focus {
+  border-color: #9bb7e8;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.11);
+}
+
 .toolbar {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.text-tools {
   flex-wrap: wrap;
-  gap: 4px;
+}
+
+.layout-tools {
+  display: grid;
+  grid-template-columns: minmax(210px, 1fr) 42px;
 }
 
 .tool-button,
@@ -264,22 +317,46 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
+  min-height: 36px;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 850;
 }
 
 .tool-button {
-  width: 30px;
+  width: 36px;
   border: 1px solid var(--line);
   color: var(--ink);
   background: var(--soft);
 }
 
+.tool-button:hover,
+.mini-button:hover,
+.secondary-button:hover,
+.image-chip-actions button:hover,
+.image-manager-button:hover {
+  border-color: #c3d0df;
+  background: #ffffff;
+}
+
+.primary-button:hover {
+  background: #0f172a;
+}
+
+.danger-button:hover {
+  border-color: #fdba74;
+  background: #ffedd5;
+}
+
 .profile-tool {
-  width: 34px;
+  width: 38px;
   align-self: stretch;
+}
+
+.file-tool {
+  position: relative;
+  width: 42px;
+  min-height: 40px;
 }
 
 .align-menu {
@@ -306,7 +383,7 @@ button {
   left: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: repeat(3, 30px);
+  grid-template-columns: repeat(3, 36px);
   gap: 4px;
   padding: 6px;
   border: 1px solid var(--line);
@@ -355,13 +432,13 @@ button {
 
 .settings-row {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .settings-row label {
   display: grid;
-  gap: 6px;
+  gap: 7px;
   color: var(--muted);
   font-size: 12px;
   font-weight: 800;
@@ -370,7 +447,7 @@ button {
 .settings-row input,
 .settings-row select {
   width: 100%;
-  height: 36px;
+  height: 38px;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 4px 8px;
@@ -433,7 +510,7 @@ button {
   resize: none;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 15px;
+  padding: 16px;
   color: var(--ink);
   background: #fbfcfe;
   line-height: 1.65;
@@ -448,7 +525,7 @@ button {
   min-height: 0;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 2px 0 4px;
+  padding: 0 0 2px;
 }
 
 .image-strip.has-images {
@@ -458,14 +535,16 @@ button {
 
 .image-manager-button {
   flex: 0 0 auto;
-  min-height: 38px;
-  padding: 0 14px;
+  width: 168px;
+  min-height: 46px;
+  padding: 0 18px;
   border: 1px dashed #cbd5e1;
   border-radius: 8px;
   color: var(--ink);
   background: #fbfcfe;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 850;
+  text-align: left;
 }
 
 .image-chip {
