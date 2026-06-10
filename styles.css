@@ -162,6 +162,51 @@ button {
   background: #ffffff;
 }
 
+.export-menu {
+  position: relative;
+  min-width: 0;
+}
+
+.export-toggle {
+  width: 100%;
+  list-style: none;
+  cursor: pointer;
+}
+
+.export-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.export-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 30;
+  display: grid;
+  min-width: 122px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 18px 40px rgba(17, 24, 39, 0.18);
+}
+
+.export-menu-panel button {
+  justify-content: flex-start;
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: 6px;
+  color: var(--ink);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.export-menu-panel button:hover {
+  background: #eef3f8;
+}
+
 .sidebar-toggle {
   position: absolute;
   top: 10px;

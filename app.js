@@ -18,7 +18,10 @@ const els = {
   newDoc: $("#newDocBtn"),
   duplicateDoc: $("#duplicateDocBtn"),
   sidebarToggle: $("#sidebarToggleBtn"),
+  exportMenu: $("#exportMenu"),
   exportDocs: $("#exportDocsBtn"),
+  exportMarkdown: $("#exportMarkdownBtn"),
+  exportWord: $("#exportWordBtn"),
   importDocs: $("#importDocsInput"),
   deleteDoc: $("#deleteDocBtn"),
   title: $("#titleInput"),
@@ -476,6 +479,54 @@ function exportDocuments() {
   els.status.textContent = `已导出 ${docs.length} 篇文档备份`;
 }
 
+function closeExportMenu() {
+  if (els.exportMenu) els.exportMenu.open = false;
+}
+
+function safeFilename(name, fallback = "publish") {
+  return String(name || fallback)
+    .trim()
+    .replace(/[\\/:*?"<>|]+/g, "-")
+    .replace(/\s+/g, " ")
+    .slice(0, 80)
+    .replace(/[. ]+$/g, "") || fallback;
+}
+
+function exportCurrentMarkdown() {
+  syncFormToDoc(false);
+  const doc = activeDoc();
+  if (!doc) return;
+  const markdown = exportedMarkdown(doc);
+  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+  saveBlob(blob, `${safeFilename(doc.title)}.md`);
+  els.status.textContent = "已导出当前文档 Markdown";
+  closeExportMenu();
+}
+
+async function exportCurrentWord() {
+  syncFormToDoc(false);
+  const doc = activeDoc();
+  if (!doc) return;
+  els.status.textContent = "正在生成 Word 文档...";
+  const body = await buildRichHtml(doc);
+  const html = `<!doctype html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>${escapeHtml(doc.title || "Publish Studio")}</title>
+  <style>
+    body { margin: 32px auto; max-width: 760px; }
+    img { max-width: 100%; }
+  </style>
+</head>
+<body>${body}</body>
+</html>`;
+  const blob = new Blob(["\ufeff", html], { type: "application/msword;charset=utf-8" });
+  saveBlob(blob, `${safeFilename(doc.title)}.doc`);
+  els.status.textContent = "已导出当前文档 Word";
+  closeExportMenu();
+}
+
 function normalizeImportedDoc(raw, fallbackTitle = "导入文档") {
   const doc = {
     ...defaultDoc(),
@@ -510,31 +561,35 @@ function uniqueImportedDoc(doc) {
 function titleFromMarkdown(text, filename) {
   const heading = text.match(/^#\s+(.+)$/m);
   if (heading) return heading[1].trim().slice(0, 40) || "导入文档";
-  return (filename || "导入文档").replace(/\.(md|txt)$/i, "").slice(0, 40) || "导入文档";
+  return (filename || "导入文档").replace(/\.(md|markdown|txt)$/i, "").slice(0, 40) || "导入文档";
 }
 
 async function importDocuments(event) {
-  const file = event.target.files?.[0];
-  if (!file) return;
+  const files = [...(event.target.files || [])];
+  if (!files.length) return;
   try {
-    const text = await readFileAsText(file);
     let imported = [];
     let importedActiveId = null;
-    if (/\.json$/i.test(file.name)) {
-      const data = JSON.parse(text);
-      const rawDocs = Array.isArray(data) ? data : Array.isArray(data.docs) ? data.docs : [];
-      importedActiveId = data.activeId || rawDocs[0]?.id || null;
-      imported = rawDocs.map((doc) => normalizeImportedDoc(doc, doc.title || file.name));
-    } else {
-      imported = [
-        normalizeImportedDoc(
-          {
-            title: titleFromMarkdown(text, file.name),
-            content: text,
-          },
-          titleFromMarkdown(text, file.name),
-        ),
-      ];
+
+    for (const file of files) {
+      const text = await readFileAsText(file);
+      if (/\.json$/i.test(file.name)) {
+        const data = JSON.parse(text);
+        const rawDocs = Array.isArray(data) ? data : Array.isArray(data.docs) ? data.docs : [];
+        if (!importedActiveId) importedActiveId = data.activeId || rawDocs[0]?.id || null;
+        imported.push(...rawDocs.map((doc) => normalizeImportedDoc(doc, doc.title || file.name)));
+      } else if (/\.(md|markdown|txt)$/i.test(file.name) || /markdown|plain/.test(file.type)) {
+        const title = titleFromMarkdown(text, file.name);
+        imported.push(
+          normalizeImportedDoc(
+            {
+              title,
+              content: text,
+            },
+            title,
+          ),
+        );
+      }
     }
 
     imported = imported.filter((doc) => doc.content || doc.title).map(uniqueImportedDoc);
@@ -2436,7 +2491,17 @@ function bindEvents() {
   els.sidebarToggle.addEventListener("click", () => {
     setSidebarCollapsed(!els.appShell.classList.contains("sidebar-collapsed"));
   });
-  els.exportDocs.addEventListener("click", exportDocuments);
+  els.exportDocs.addEventListener("click", () => {
+    exportDocuments();
+    closeExportMenu();
+  });
+  els.exportMarkdown.addEventListener("click", exportCurrentMarkdown);
+  els.exportWord.addEventListener("click", exportCurrentWord);
+  document.addEventListener("click", (event) => {
+    if (els.exportMenu?.open && !els.exportMenu.contains(event.target)) {
+      closeExportMenu();
+    }
+  });
   els.importDocs.addEventListener("change", importDocuments);
   els.deleteDoc.addEventListener("click", deleteDoc);
   els.avatarInput.addEventListener("change", handleAvatar);

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Publish Studio</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111827'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='34' fill='white' font-family='Arial'%3E%E6%96%87%3C/text%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="./styles.css?v=20260609-compact-dock" />
+    <link rel="stylesheet" href="./styles.css?v=20260610-doc-export" />
   </head>
   <body>
     <main class="app-shell" id="appShell">
@@ -25,11 +25,18 @@
 
         <div class="library-actions action-strip">
           <button id="newDocBtn" class="secondary-button compact-action" type="button">新建</button>
-          <label class="secondary-button compact-action file-import" title="导入备份或 Markdown">
+          <label class="secondary-button compact-action file-import" title="导入 JSON 备份或 Markdown">
             导入
-            <input id="importDocsInput" type="file" accept=".json,.md,.txt,application/json,text/markdown,text/plain" />
+            <input id="importDocsInput" type="file" accept=".json,.md,.markdown,.txt,application/json,text/markdown,text/plain" multiple />
           </label>
-          <button id="exportDocsBtn" class="secondary-button compact-action" type="button">导出</button>
+          <details id="exportMenu" class="export-menu">
+            <summary class="secondary-button compact-action export-toggle">导出</summary>
+            <div class="export-menu-panel" aria-label="导出格式">
+              <button id="exportDocsBtn" type="button">JSON 备份</button>
+              <button id="exportMarkdownBtn" type="button">Markdown</button>
+              <button id="exportWordBtn" type="button">Word</button>
+            </div>
+          </details>
           <button id="duplicateDocBtn" class="icon-button copy-action" type="button" title="复制当前文档" aria-label="复制当前文档">
             <span>⧉</span>
           </button>
@@ -182,6 +189,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-    <script src="./app.js?v=20260609-compact-dock"></script>
+    <script src="./app.js?v=20260610-doc-export"></script>
   </body>
 </html>
